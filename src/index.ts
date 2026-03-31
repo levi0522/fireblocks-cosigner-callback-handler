@@ -41,7 +41,7 @@ const app = new Elysia()
       jwt.verify(rawBody, cosignerPubKey);
       console.log("✅ 验签成功");
 
-      const { requestId, sourceType, sourceId, note } = decoded as TxSignRequestPayload;
+      const { requestId, sourceType, sourceId, note, operation, extraParameters } = decoded as TxSignRequestPayload;
 
       if (!requestId) {
         throw new Error("缺少 requestId");
@@ -64,6 +64,17 @@ const app = new Elysia()
       } else {
         action = "REJECT";
         rejectionReason = "note 为 0 时拒绝";
+      }
+
+      if (operation === "PROGRAM_CALL") {
+        const programCall = extraParameters.programCall
+        const decodedInstructions = programCall.decodedInstructions
+        console.log("decodedInstructions:", decodedInstructions);
+      } else if (operation === "CONTRACT_CALL") {
+
+      } else {
+        action = "REJECT";
+        rejectionReason = "不支持的操作";
       }
 
       console.log("最终决策:", action);
