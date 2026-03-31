@@ -64,6 +64,7 @@ const app = new Elysia()
       }
 
       console.log("最终决策:", action);
+      console.log("最终原因:", rejectionReason);
 
       const signedRes = jwt.sign(
         {
