@@ -15,6 +15,13 @@ const cosignerPubKey = fs.readFileSync(
   new URL("../cosigner_public.pem", import.meta.url)
 );
 
+const ALLOWED_SOURCES = [
+  {
+    sourceType: "VAULT",
+    sourceId: "94",
+  },
+] as const;
+
 const app = new Elysia()
   .get("/ping", () => "pong")
   .post("/v2/tx_sign_request", async ({ request, set }) => {
@@ -22,7 +29,6 @@ const app = new Elysia()
       console.log("\n====== 收到回调 ======");
 
       const rawBody = await request.text();
-      console.log("rawBody:", rawBody);
 
       const decoded = jwt.decode(rawBody);
       console.log("解析内容:", decoded);
@@ -34,7 +40,7 @@ const app = new Elysia()
       jwt.verify(rawBody, cosignerPubKey);
       console.log("✅ 验签成功");
 
-      const { requestId, assetId, amount } = decoded as TxSignRequestPayload;
+      const { requestId, sourceType, sourceId, note } = decoded as TxSignRequestPayload;
 
       if (!requestId) {
         throw new Error("缺少 requestId");
@@ -43,14 +49,18 @@ const app = new Elysia()
       let action = "REJECT";
       let rejectionReason = "默认拒绝";
 
-      if (assetId === "ETH" && Number(amount) < 1) {
+      if (ALLOWED_SOURCES.some((source) => source.sourceType === sourceType && source.sourceId === sourceId)) {
         action = "APPROVE";
-        rejectionReason = "";
+        rejectionReason = "支持的来源";
+      } else {
+        rejectionReason = "不支持的来源";
       }
 
-      if (assetId === "USDT") {
+      if (note === "1") {
         action = "APPROVE";
-        rejectionReason = "";
+        rejectionReason = "note 为 1 时批准";
+      } else {
+        rejectionReason = "note 为 0 时拒绝";
       }
 
       console.log("最终决策:", action);
