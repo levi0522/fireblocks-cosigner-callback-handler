@@ -28,6 +28,7 @@ const app = new Elysia()
     try {
       console.log("\n====== 收到回调 ======");
 
+      console.log("request:", request);
       const rawBody = await request.text();
 
       const decoded = jwt.decode(rawBody);
