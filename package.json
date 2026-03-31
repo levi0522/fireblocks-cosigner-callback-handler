@@ -2,6 +2,10 @@
   "name": "fireblocks-cosigner-callback-handler",
   "version": "1.0.50",
   "scripts": {
+    "build": "bun build ./src/index.ts --outdir ./dist --target bun",
+    "start": "bun run ./dist/index.js",
+    "start:bg": "mkdir -p ./logs && nohup bun run ./dist/index.js > ./logs/app.log 2>&1 & echo $! > ./logs/app.pid",
+    "stop:bg": "test -f ./logs/app.pid && kill $(cat ./logs/app.pid) && rm ./logs/app.pid || echo \"No background process found\"",
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "bun run --watch src/index.ts"
   },
