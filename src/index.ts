@@ -62,8 +62,8 @@ const app = new Elysia()
         action = "APPROVE";
         rejectionReason = "note 为 1 时批准";
       } else {
-        action = "IGNORE";
-        rejectionReason = "note 为 0 时忽略";
+        action = "REJECT";
+        rejectionReason = "note 为 0 时拒绝";
       }
 
       console.log("最终决策:", action);
