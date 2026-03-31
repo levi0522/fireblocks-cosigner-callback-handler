@@ -53,6 +53,7 @@ const app = new Elysia()
         action = "APPROVE";
         rejectionReason = "支持的来源";
       } else {
+        action = "REJECT";
         rejectionReason = "不支持的来源";
       }
 
@@ -60,6 +61,7 @@ const app = new Elysia()
         action = "APPROVE";
         rejectionReason = "note 为 1 时批准";
       } else {
+        action = "REJECT";
         rejectionReason = "note 为 0 时拒绝";
       }
 
