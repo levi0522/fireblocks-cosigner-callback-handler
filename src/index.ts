@@ -47,35 +47,38 @@ const app = new Elysia()
         throw new Error("缺少 requestId");
       }
 
-      let action = "REJECT";
-      let rejectionReason = "默认拒绝";
+      let action = "APPROVE";
+      let rejectionReason = "默认批准";
 
-      if (ALLOWED_SOURCES.some((source) => source.sourceType === sourceType && source.sourceId === sourceId)) {
-        action = "APPROVE";
-        rejectionReason = "支持的来源";
-      } else {
-        action = "REJECT";
-        rejectionReason = "不支持的来源";
-      }
+      // let action = "REJECT";
+      // let rejectionReason = "默认拒绝";
 
-      if (note === "1") {
-        action = "APPROVE";
-        rejectionReason = "note 为 1 时批准";
-      } else {
-        action = "REJECT";
-        rejectionReason = "note 为 0 时拒绝";
-      }
+      // if (ALLOWED_SOURCES.some((source) => source.sourceType === sourceType && source.sourceId === sourceId)) {
+      //   action = "APPROVE";
+      //   rejectionReason = "支持的来源";
+      // } else {
+      //   action = "REJECT";
+      //   rejectionReason = "不支持的来源";
+      // }
 
-      if (operation === "PROGRAM_CALL") {
-        const programCall = extraParameters.programCall
-        const decodedInstructions = programCall.decodedInstructions
-        console.log("decodedInstructions:", decodedInstructions);
-      } else if (operation === "CONTRACT_CALL") {
+      // if (note === "1") {
+      //   action = "APPROVE";
+      //   rejectionReason = "note 为 1 时批准";
+      // } else {
+      //   action = "REJECT";
+      //   rejectionReason = "note 为 0 时拒绝";
+      // }
 
-      } else {
-        action = "REJECT";
-        rejectionReason = "不支持的操作";
-      }
+      // if (operation === "PROGRAM_CALL") {
+      //   const programCall = extraParameters.programCall
+      //   const decodedInstructions = programCall.decodedInstructions
+      //   console.log("decodedInstructions:", decodedInstructions);
+      // } else if (operation === "CONTRACT_CALL") {
+
+      // } else {
+      //   action = "REJECT";
+      //   rejectionReason = "不支持的操作";
+      // }
 
       console.log("最终决策:", action);
       console.log("最终原因:", rejectionReason);
